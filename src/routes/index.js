@@ -34,7 +34,7 @@ router.post('/signin',async(req,res)=>{
     return res.status(200).json({token});
 });
 
-router.get('/tasks',async(req,res)=>{
+router.get('/tasks',(req,res)=>{
     res.json([
         {
             _id:1,
@@ -86,7 +86,16 @@ router.get('/private-tasks',verifyToken,(req,res)=>{
 module.exports=router;
 
 function verifyToken(req,res,next){
-    if(!req.header.authorization){
-        return res.status(401).send('Authorize Request');
+    if(!req.headers.authorization){
+        return res.status(401).send('anUnthorize Request');
     }
+
+    const token = req.headers.authorization.split(' ')[1]
+    if(token=='null'){
+        return res.status(401).send('anUnthorize Request');
+    }
+
+    const payload = jwt.verify(token,'secretKey')
+    req.userId=payload._id
+    next();
 }
