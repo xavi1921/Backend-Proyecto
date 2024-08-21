@@ -1,8 +1,9 @@
 const express = require('express')
 const app=express();
-
+const cors=require('cors');
 require('./database');
 
+app.use(cors());
 //esta linea hace que no salga undefind al momento de enviar 
 //datos y muestre los datos en consola por express
 app.use(express.json());
